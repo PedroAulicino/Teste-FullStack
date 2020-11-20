@@ -81,12 +81,14 @@ function HomePage() {
           </div>
         </div>
       ))}
-      <button onClick={voltar} variant='contained' className='button-info'>
-        Voltar
-      </button>
-      <button onClick={proximo} variant='contained' className='button-info'>
-        Proximo
-      </button>
+      <div className='buttons-div'>
+        <button onClick={voltar} className='button-infoo'>
+          Voltar
+        </button>
+        <button onClick={proximo} className='button-infoo'>
+          Proximo
+        </button>
+      </div>
     </div>
   );
 }

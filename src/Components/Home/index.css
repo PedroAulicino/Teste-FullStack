@@ -1,5 +1,5 @@
 .list-card {
-  max-width: 50%;
+  width: 60%;
   border-radius: 8px;
   border: 7px solid #3598db;
   box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.15);
@@ -7,7 +7,7 @@
   padding: 15px;
   align-items: center;
   margin: auto;
-  margin-top: 4px;
+  margin-top: 20px;
 }
 
 .list-card__image {
@@ -55,23 +55,30 @@
 }
 
 .list-search__input {
+  color: #3498db;
+  border: 1px solid #3598db;
   display: flex;
   height: 42px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  width: 60%;
+
+  border-radius: 7px;
+  width: 62%;
   margin-bottom: 20px;
   padding: 0 10px;
   font-size: 16px;
   margin: auto;
 }
-.button-info {
-  display: block;
-  width: 40%;
-  margin: 0 auto 0 auto;
+.button-infoo {
+  width: 20%;
   color: #3498db;
   border: 1px solid #3598db;
   padding: 10px;
   cursor: pointer;
   border-radius: 8px;
+}
+.buttons-div {
+  margin: auto;
+  width: 62%;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
 }
