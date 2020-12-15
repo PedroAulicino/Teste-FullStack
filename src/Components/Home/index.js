@@ -1,96 +1,89 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import Api from "../../Service/Api";
 import "./index.css";
-import API from "../../Service/Api";
-import Favoritar from "../Favorito/index";
-function HomePage() {
-  const [list, setlist] = useState([]);
-  const [currentPage] = useState(1);
-  const [postsPerPage] = useState(5);
-  const [busca, setBusca] = useState("");
-  const [count, setCount] = useState(1);
-
-  const indexList = currentPage * postsPerPage;
-  const indexOfFirstPost = indexList - postsPerPage;
-  const currentPosts = list.slice(indexOfFirstPost, indexList);
+const Home = () => {
+  const [User, SetUser] = useState([]);
+  const [search, SetSearch] = useState("");
 
   useEffect(() => {
-    loadList();
-  }, [busca]);
-  const params = {};
+    const params = {};
 
-  if (busca) {
-    params.title_like = busca;
-  }
-
-  const loadList = async () => {
-    const result = await API().get("/photos", {
-      params,
-    });
-    setlist(result.data);
-  };
-
-  const listar = (index) => {
-    const requestList = [];
-    for (var i = index; i < index + 5; i++) {
-      const toRequest = API().get(`photos/${i}`);
-      requestList.push(toRequest);
+    if (search) {
+      params.nome_produto = search;
     }
-    Promise.all(requestList).then((data) => {
-      const personaListData = data.map((data) => {
-        return data.data;
-      });
 
-      console.log(personaListData);
-      setlist(personaListData);
-    });
-  };
-  const proximo = () => {
-    const countData = count + 5;
-    setCount(countData);
-    listar(countData);
-  };
-  const voltar = () => {
-    const countData = count - 5;
-    setCount(countData);
-    listar(countData);
-  };
+    async function getUser() {
+      try {
+        const response = await Api().get("/produtos", { params });
+        SetUser(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    getUser();
+  }, [search]);
+
+  async function DeleteProduct(_id) {
+    try {
+      await Api().delete(`/delete/produtos/${_id}`);
+
+      SetUser(User.filter((User) => User._id !== _id));
+    } catch (err) {
+      alert("Erro ao deletar Produto , Tente denovo");
+    }
+  }
 
   return (
     <div>
+      <header className='list-search__inputt'>
+        <h1>Lista de Pokemons</h1>
+        <Link className='user-card__li' to='/cadastrar'>
+          Cadastrar
+        </Link>
+      </header>
+
       <input
         type='search'
         className='list-search__input'
         placeholder='Buscar'
-        value={busca}
-        onChange={(ev) => setBusca(ev.target.value)}
+        value={search}
+        onChange={(ev) => SetSearch(ev.target.value)}
       />
 
-      {currentPosts.map((user) => (
-        <div key={user.id} className='list-card'>
+      {User.map((user) => (
+        <div key={user._id} className='list-card'>
           <img
-            src={user.thumbnailUrl}
+            src={user.img_produto}
             alt={user.title}
             className='list-card__image'
           />
           <div className='list-card__info'>
-            <h1 className='list-card__title'>{user.title}</h1>
+            <h1 className='list-card__title'>{user.nome_produto}</h1>
 
-            <footer className='list-card__footer'>
-              <Favoritar></Favoritar>
+            <footer className='user-card__footer'>
+              <Link className='user-card__link' to={`/produto/${user._id}`}>
+                Detalhes
+              </Link>
+
+              <Link className='user-card__linkk' to={`/users/edit/${user._id}`}>
+                Editar
+              </Link>
+
+              <Link
+                className='user-card__linkk'
+                to='/'
+                onClick={() => DeleteProduct(user._id)}
+              >
+                Deletar
+              </Link>
             </footer>
           </div>
         </div>
       ))}
-      <div className='buttons-div'>
-        <button onClick={voltar} className='button-infoo'>
-          Voltar
-        </button>
-        <button onClick={proximo} className='button-infoo'>
-          Proximo
-        </button>
-      </div>
     </div>
   );
-}
-
-export default HomePage;
+};
+export default Home;

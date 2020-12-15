@@ -2,7 +2,7 @@ import axios from "axios";
 
 const request = () => {
   return axios.create({
-    baseURL: "https://jsonplaceholder.typicode.com",
+    baseURL: "http://localhost:3333/api",
   });
 };
 export default request;
